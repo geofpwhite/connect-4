@@ -114,7 +114,7 @@ func (c4 *connect4) scanForConnect4() (int, map[queueElement]bool) {
 						neighbor.upStreak = poppedElement.upStreak + 1
 						neighbor.rightStreak = 0
 						neighbor.rightUpStreak = 0
-						neighbor.upStreak = 0
+						neighbor.rightDownStreak = 0
 					} else if i == 1 {
 						neighbor.rightStreak = poppedElement.rightStreak + 1
 						neighbor.rightDownStreak = 0
