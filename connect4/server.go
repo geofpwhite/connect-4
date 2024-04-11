@@ -90,17 +90,15 @@ func serve() {
 					team, _ := strconv.Atoi(msgStrings[0])
 					column, _ := strconv.Atoi(msgStrings[1])
 					insert(team, column)
-
 				}
 			}
-
 		}
-		// Handle WebSocket communication here
-		// ...
 	})
 	go func() {
 		for newGrid := range updateChannel {
+			slices.Reverse(newGrid)
 			for c := range connections {
+
 				(*c).WriteJSON(newGrid)
 			}
 		}

@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Connect 4 Grid</title>
   <script type="text/javascript" >
+    const socket = new WebSocket("ws://localhost:8080/ws");
     function insert(team, column) {
       socket.send(team+','+column)
     }
@@ -13,19 +14,28 @@
       socket.send('r')
     }
     
-        const socket = new WebSocket("ws://localhost:8080/ws");
 
-        socket.onopen = (event) => {
-            console.log("WebSocket connection opened");
-        };
+    socket.onopen = (event) => {
+        console.log("WebSocket connection opened");
+    };
 
-        socket.onmessage = (event) => {
-          console.log(event)
-        };
+    socket.onmessage = (event) => {
+      let ary = JSON.parse(event.data);
+      for (let i = 0 ; i < 8 ; i ++){
+        for (let j = 0; j < 8 ; j++){
+          let tag = document.getElementById(i+'-'+j)
+          ary[i][j]==1?
+          tag.style.backgroundColor = 'blue'
+          : ary[i][j]==2? 
+          tag.style.backgroundColor = 'red'
+          : tag.style.backgroundColor='white'
+        }
+      }
+    };
 
-        socket.onclose = (event) => {
-            console.log("WebSocket connection closed");
-        }; 
+    socket.onclose = (event) => {
+        console.log("WebSocket connection closed");
+    }; 
   </script>
 
   <style>
@@ -74,9 +84,9 @@
 
 <body>
   <div id="grid" class="grid">
-    {{ range $row := .Rows }}
-      {{ range $col := $row }}
-        <div class="cell-{{$col}}" ></div>
+    {{ range $i,$row := .Rows }}
+      {{ range $j,$col := $row }}
+        <div id="{{$i}}-{{$j}}" class="cell-{{$col}}" ></div>
       {{ end }}
     {{ end }}
     {{range $row,$x:= .Rows}}
